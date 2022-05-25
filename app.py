@@ -16,9 +16,10 @@ class Post(db.Model):
     body = db.Column(db.String(300),nullable=False)
     created_at = db.Column(db.DateTime,nullable=False,default=datetime.now(pytz.timezone("Asia/Tokyo")))
 
-@app.route("/")
+@app.route("/",methods=["GET"])
 def index():     #index関数の定義
-    return render_template("index.html")   #index.htmlファイルを読み込む
+    posts = Post.query.all()
+    return render_template("index.html",posts=posts)   #index.htmlファイルを読み込む
 
 @app.route("/article1")
 def article1():     
@@ -41,6 +42,35 @@ def create():
         return redirect("/")
     else:
         return render_template("create.html")
+
+@app.route("/<int:id>/update",methods=["GET","POST"])   #DBのIDがルーティングの部分に持ってこれるように指定する
+def update(id):
+    post=Post.query.get(id)
+    if request.method == "GET":
+        return render_template("update.html",post=post)
+    else:
+        post.title = request.form.get("title")
+        post.body = request.form.get("body")
+        db.session.commit()
+        return redirect("/")
         
+@app.route("/<int:id>/delete",methods=["GET"])
+def delete(id):
+    post = Post.query.get(id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect("/")
+
+@app.route("/<int:id>/view",methods=["GET","POST"])   
+def view(id):
+    post=Post.query.get(id)
+    if request.method == "GET":
+        return render_template("view.html",post=post)
+    else:
+        post.title = request.form.get("title")
+        post.body = request.form.get("body")
+        db.session.commit()
+        return redirect("/")
+
 if __name__ == '__main__':
     app.run(debug=True)   #デバッグモードOn

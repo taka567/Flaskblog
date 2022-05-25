@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>view</h1>
+    <form method="POST">
+        <p><h4><label for="title">タイトル<br></h4></label>
+        {{post.title}}</p>
+        <p>- 作成日時：{{post.created_at}}</p>
+        <p><h4><label for="body">内容<br></h4></label>
+        {{post.body}}</p>
+
+        <a href="/{{post.id}}/update" role="button">編集</a>
+        <a href="/{{post.id}}/delete" role="button">削除</a>
+
+    </form>
+
+    <a href= "{{url_for('index')}}">戻る</a>
+{% endblock %}

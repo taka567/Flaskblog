@@ -3,7 +3,11 @@
 <p><a href="/create" role="button">新規登録</a></p>
 <article>
   <h2>ホーム画面</h2>
-  <p>こちらはホーム画面です。</p>
+  <p>こちらはホーム画面です。<br>
+  見出しをクリックすると記事に飛べます。</p>
+  {% for post in posts %} {#取得した内容を１つずつ表示#}
+  <a href="/{{post.id}}/view" role="button"><h2>{{post.title}}</h2></a>
+  {% endfor %}
 </article>
 <a href="{{url_for('article1')}}">記事1へ</a>
 <a href="{{url_for('article2')}}">記事2へ</a>
